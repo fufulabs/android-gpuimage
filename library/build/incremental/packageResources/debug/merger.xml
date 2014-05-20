@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="main" >
+        <source path="/Users/blazsolar/Documents/workspace/fika/android/Fika2Project/libraries/android-gpuimage/library/res" />
+        <source path="/Users/blazsolar/Documents/workspace/fika/android/Fika2Project/libraries/android-gpuimage/library/build/res/rs/debug" />
+        <source path="/Users/blazsolar/Documents/workspace/fika/android/Fika2Project/libraries/android-gpuimage/library/build/res/generated/debug" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="/Users/blazsolar/Documents/workspace/fika/android/Fika2Project/libraries/android-gpuimage/library/src/debug/res" />
+    </dataSet>
+
+</merger>
