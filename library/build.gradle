@@ -21,12 +21,12 @@ uploadArchives {
     repositories.mavenDeployer {
         beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-        repository(url: sonatypeRepo) {
-            authentication(userName: sonatypeUsername, password: sonatypePassword)
-        }
-        snapshotRepository(url: sonatypeSnapshotRepo) {
-            authentication(userName: sonatypeUsername, password: sonatypePassword)
-        }
+//        repository(url: sonatypeRepo) {
+//            authentication(userName: sonatypeUsername, password: sonatypePassword)
+//        }
+//        snapshotRepository(url: sonatypeSnapshotRepo) {
+//            authentication(userName: sonatypeUsername, password: sonatypePassword)
+//        }
 
         pom.project {
             artifactId 'gpuimage-library'
@@ -61,8 +61,8 @@ uploadArchives {
 }
 
 android {
-    compileSdkVersion 17
-    buildToolsVersion "17.0.0"
+    compileSdkVersion 19
+    buildToolsVersion "19.0.3"
 
     sourceSets {
         main {
@@ -78,43 +78,34 @@ android {
         instrumentTest.setRoot('tests')
     }
 }
-
-//////////////
-// NDK Support
-//////////////
-task copyNativeLibs(type: Copy, dependsOn: 'buildNative') {
-    from(new File('libs')) { include '**/*.so' }
-    into new File(buildDir, 'native-libs')
-}
-
-tasks.withType(Compile) { compileTask -> compileTask.dependsOn copyNativeLibs }
-
-clean.dependsOn 'cleanCopyNativeLibs'
-
-tasks.withType(com.android.build.gradle.tasks.PackageApplication) { pkgTask ->
-    pkgTask.jniDir new File(buildDir, 'native-libs')
-}
-
-task buildNative(type: Exec) {
-    if (System.env.ANDROID_NDK_HOME != null) {
-        def ndkBuild
-		if (System.properties['os.name'].toLowerCase().contains('windows')) {
-			ndkBuild = new File(System.env.ANDROID_NDK_HOME, 'ndk-build.cmd')
-		} else {
-			ndkBuild = new File(System.env.ANDROID_NDK_HOME, 'ndk-build')
-		}
-        commandLine ndkBuild
-    } else {
-        doLast {
-            println '##################'
-            println 'Skipping NDK build'
-            println 'Reason: ANDROID_NDK_HOME not set.'
-            println '##################'
-        }
-    }
-}
-
-// UTF-8
-tasks.withType(Compile) {
-    options.encoding = 'UTF-8'
-}
+//
+////////////////
+//// NDK Support
+////////////////
+//task copyNativeLibs(type: Copy, dependsOn: 'buildNative') {
+//    from(new File('libs')) { include '**/*.so' }
+//    into new File(buildDir, 'native-libs')
+//}
+//
+//tasks.withType(Compile) { compileTask -> compileTask.dependsOn copyNativeLibs }
+//
+//clean.dependsOn 'cleanCopyNativeLibs'
+//
+//task buildNative(type: Exec) {
+//    if (System.env.ANDROID_NDK_HOME != null) {
+//        def ndkBuild
+//		if (System.properties['os.name'].toLowerCase().contains('windows')) {
+//			ndkBuild = new File(System.env.ANDROID_NDK_HOME, 'ndk-build.cmd')
+//		} else {
+//			ndkBuild = new File(System.env.ANDROID_NDK_HOME, 'ndk-build')
+//		}
+//        commandLine ndkBuild
+//    } else {
+//        doLast {
+//            println '##################'
+//            println 'Skipping NDK build'
+//            println 'Reason: ANDROID_NDK_HOME not set.'
+//            println '##################'
+//        }
+//    }
+//}
