@@ -38,10 +38,13 @@ import android.provider.MediaStore;
 import android.view.Display;
 import android.view.WindowManager;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
 /**
  * The main accessor for GPUImage functionality. This class helps to do common
@@ -165,6 +168,15 @@ public class GPUImage {
     }
 
     /**
+     * Gets the filter which is applied to the image.
+     *
+     * @return filter the currently used filter
+     */
+    public GPUImageFilter getFilter() {
+        return mFilter;
+    }
+
+    /**
      * Sets the image on which the filter should be applied.
      * 
      * @param bitmap the new image
@@ -249,13 +261,21 @@ public class GPUImage {
         return getBitmapWithFilterApplied(mCurrentBitmap);
     }
 
+    public Bitmap getBitmapWithFilterApplied(final Bitmap bitmap) {
+        return getBitmapWithFilterApplied(bitmap, bitmap.getWidth(), bitmap.getHeight());
+    }
+
+    public Bitmap getBitmapWithFilterApplied(int width, int height) {
+        return getBitmapWithFilterApplied(mCurrentBitmap, width, height);
+    }
+
     /**
      * Gets the given bitmap with current filter applied as a Bitmap.
      * 
      * @param bitmap the bitmap on which the current filter should be applied
      * @return the bitmap with filter applied
      */
-    public Bitmap getBitmapWithFilterApplied(final Bitmap bitmap) {
+    public Bitmap getBitmapWithFilterApplied(final Bitmap bitmap, int width, int height) {
         if (mGlSurfaceView != null) {
             mRenderer.deleteImage();
             mRenderer.runOnDraw(new Runnable() {
@@ -278,11 +298,18 @@ public class GPUImage {
             }
         }
 
+        Rotation rotation = mRenderer.getRotation();
+        if (rotation == Rotation.ROTATION_90 || rotation == Rotation.ROTATION_270) {
+            width += height;
+            height = width - height;
+            width = width - height;
+        }
+
         GPUImageRenderer renderer = new GPUImageRenderer(mFilter);
-        renderer.setRotation(Rotation.NORMAL,
+        renderer.setRotation(rotation,
                 mRenderer.isFlippedHorizontally(), mRenderer.isFlippedVertically());
         renderer.setScaleType(mScaleType);
-        PixelBuffer buffer = new PixelBuffer(bitmap.getWidth(), bitmap.getHeight());
+        PixelBuffer buffer = new PixelBuffer(width, height);
         buffer.setRenderer(renderer);
         renderer.setImageBitmap(bitmap, false);
         Bitmap result = buffer.getBitmap();
