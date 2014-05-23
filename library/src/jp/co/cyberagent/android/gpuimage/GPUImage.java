@@ -397,6 +397,10 @@ public class GPUImage {
         new SaveTask(bitmap, folderName, fileName, listener).execute();
     }
 
+    public Bitmap getCurrentBitmap() {
+        return mCurrentBitmap;
+    }
+
     /**
      * Runs the given Runnable on the OpenGL thread.
      *
