@@ -240,8 +240,6 @@ public class GPUImageView extends FrameLayout {
             @Override
             public void run() {
                 // Show loading¥
-                addView(new LoadingView(getContext()));
-
                 mGLSurfaceView.requestLayout();
             }
         });
@@ -267,14 +265,6 @@ public class GPUImageView extends FrameLayout {
             }
         });
         requestRender();
-
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Remove loading view
-                removeViewAt(1);
-            }
-        }, 300);
 
         return bitmap;
     }
