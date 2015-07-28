@@ -46,11 +46,7 @@ public class OpenGlUtils {
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
                     GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
 
-          if( img.isRecycled()) {
-            Bitmap bitmap = Bitmap.createScaledBitmap(img, img.getWidth(),
-                img.getHeight(), true);
-            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-          } else {
+          if(!img.isRecycled()) {
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, img, 0);
           }
 
