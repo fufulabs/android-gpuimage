@@ -97,7 +97,9 @@ public class GPUImageFilterGroup extends GPUImageFilter {
     public void onInit() {
         super.onInit();
         for (GPUImageFilter filter : mFilters) {
+          if (filter != null) {
             filter.init();
+          }
         }
     }
 
@@ -178,7 +180,7 @@ public class GPUImageFilterGroup extends GPUImageFilter {
      * @see jp.co.cyberagent.android.gpuimage.GPUImageFilter#onDraw(int,
      * java.nio.FloatBuffer, java.nio.FloatBuffer)
      */
-    @SuppressLint("WrongCall")    
+    @SuppressLint("WrongCall")
     @Override
     public void onDraw(final int textureId, final FloatBuffer cubeBuffer,
                        final FloatBuffer textureBuffer) {
