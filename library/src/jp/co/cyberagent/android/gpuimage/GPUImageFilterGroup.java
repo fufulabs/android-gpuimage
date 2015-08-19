@@ -142,7 +142,9 @@ public class GPUImageFilterGroup extends GPUImageFilter {
 
         int size = mFilters.size();
         for (int i = 0; i < size; i++) {
+          if(mFilters.get(i)!=null) {
             mFilters.get(i).onOutputSizeChanged(width, height);
+          }
         }
 
         if (mMergedFilters != null && mMergedFilters.size() > 0) {
